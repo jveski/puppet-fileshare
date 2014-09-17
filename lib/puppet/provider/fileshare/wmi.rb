@@ -1,6 +1,6 @@
 require 'win32ole'
 
-Puppet::Type.type(:win_fileshare).provide(:wmi) do
+Puppet::Type.type(:fileshare).provide(:wmi) do
   desc "Windows file share functionality."
 
   def grant_user(share_name, user_name, user_domain, user_access)

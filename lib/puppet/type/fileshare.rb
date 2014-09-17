@@ -1,4 +1,4 @@
-Puppet::Type.newtype(:win_fileshare) do
+Puppet::Type.newtype(:fileshare) do
   ensurable
   newparam(:name) do
     desc "The name of the file share."
