@@ -1,4 +1,4 @@
-fileshare (WORK IN PROGRESS!)
+fileshare
 ===================
 [![Build Status](https://travis-ci.org/jolshevski/jordan-fileshare.svg?branch=master)](https://travis-ci.org/jolshevski/jordan-fileshare)
 
