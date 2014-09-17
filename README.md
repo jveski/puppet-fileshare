@@ -9,6 +9,6 @@ fileshare {'test_share_name':
   ensure      => present,
   provider    => wmi,
   source      => 'C:\test',
-  permissions => { 'domain\user' => 'full'}
+  permissions => { 'domain\user' => 'full', 'domain\user' => 'read', 'domain\user' => 'change'} #etc...
 }
 ```
