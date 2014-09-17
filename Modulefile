@@ -1,0 +1,8 @@
+name    'jordan-fileshare'
+version '0.0.1'
+source 'UNKNOWN'
+author 'Jordan Olshevski'
+license 'Apache License, Version 2.0'
+summary 'Manages Fileshares'
+description 'Manages Filesahres'
+project_page 'https://github.com/jolshevski/jordan-fileshare'
