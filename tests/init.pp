@@ -2,7 +2,7 @@ file {'c:/test':
   ensure => directory,
 }
 
-win_fileshare {'temptest':
+fileshare {'temptest':
   ensure      => present,
   path        => 'c:/test',
   comment     => 'test comment',
