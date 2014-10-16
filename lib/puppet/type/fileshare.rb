@@ -31,18 +31,4 @@ Puppet::Type.newtype(:fileshare) do
     end
   end
 
-  newparam(:permissions) do
-    desc "A hash of user => permission pairs. Permissions can include Full Control, Change, and Read."
-    validate do |value|
-      unless value.class == Hash
-        raise ArgumentError, 'Permissions must be expressed in a hash' % value 
-      end
-      value.each do |key, value|
-        unless value == 'full' || value == 'change' || value == 'read'
-          raise ArgumentError, 'Permissions can only be set to full, change, or read.' % value
-        end
-      end
-    end
-  end
-
 end
