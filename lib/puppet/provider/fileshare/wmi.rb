@@ -2,6 +2,8 @@ require 'win32ole'
 
 Puppet::Type.type(:fileshare).provide(:wmi) do
   desc "Create/Destroy Windows File Shares"
+  confine :operatingsystem => :windows
+  defaultfor :operatingsystem => :windows
 
   def create
     return_values = {
