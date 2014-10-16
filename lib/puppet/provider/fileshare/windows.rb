@@ -5,39 +5,18 @@ Puppet::Type.type(:fileshare).provide(:windows) do
   confine :operatingsystem => :windows
   defaultfor :operatingsystem => :windows
 
+  include Puppet::Provider::Fileshare::Windows::Security
+
   def create
-    return_values = {
-      0 => "success",
-      2 => "access denied",
-      8 => "unknown failure",
-      9 => "invalid name",
-      10 => "invalid level",
-      21 => "invalid parameter",
-      22 => "duplicate share",
-      23 => "redirected path",
-      24 => "unknown directory",
-      25 => "net name not found",
-    }
     creator = WIN32OLE.connect("winmgmts:Win32_Share").Create(String(@resource[:path]), String(@resource[:name]), Integer(@resource[:max_con]))
     # If the WMI call doesn't return 0, raise an error containing the appropriate message
+    #share.setsecuritydescriptor(sd)
     unless creator == 0
       raise(return_values[creator])
     end
   end
 
   def destroy
-    return_values = {
-      0 => "success",
-      2 => "access denied",
-      8 => "unknown failure",
-      9 => "invalid name",
-      10 => "invalid level",
-      21 => "invalid parameter",
-      22 => "duplicate share",
-      23 => "redirected path",
-      24 => "unknown directory",
-      25 => "net name not found",
-    }
     wmi = WIN32OLE.connect('winmgmts://localhost/root/cimv2')
     destroyer = wmi.Get("Win32_Share='#{share_name}'").delete
     if destroyer != 0
