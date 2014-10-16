@@ -18,8 +18,7 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
       24 => "unknown directory",
       25 => "net name not found",
     }
-    wmi = WIN32OLE.connect("winmgmts:Win32_Share")
-    creator = wmi.Create(String(@resource[:path]), String(@resource[:name]), Integer(@resource[:max_con]))
+    creator = WIN32OLE.connect("winmgmts:Win32_Share").Create(String(@resource[:path]), String(@resource[:name]), Integer(@resource[:max_con]))
     # If the WMI call doesn't return 0, raise an error containing the appropriate message
     unless creator == 0
       raise(return_values[creator])
