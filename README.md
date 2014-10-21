@@ -5,10 +5,9 @@ fileshare
 Puppet module to manage fileshares.  For the time being, only Windows CIFS shares are supported.
 
 ```
-fileshare {'test_share_name':
-  ensure      => present,
-  provider    => wmi,
-  source      => 'C:\test',
-  permissions => { 'domain\user' => 'full'}
+fileshare { 'test_share_name':
+  ensure  => present,
+  path    => 'C:\test',
+  comment => 'Optional Comment String Goes Here',
 }
 ```
