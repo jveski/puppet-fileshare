@@ -5,9 +5,9 @@ if $::osfamily == 'Windows' {
   }
 
   fileshare { 'temptest':
-    ensure      => present,
-    path        => 'c:/test',
-    comment     => 'test comment...',
+    ensure  => present,
+    path    => 'c:/test',
+    comment => 'test comment...',
   }
 }
 else {
