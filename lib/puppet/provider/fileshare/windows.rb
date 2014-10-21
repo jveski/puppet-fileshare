@@ -46,9 +46,11 @@ Puppet::Type.type(:fileshare).provide(:windows) do
         set_acl @resource[:name]
       end
       # Check comment
-      unless share.caption == String(@resource[:comment])
-        share.setshareinfo(nil, String(@resource[:comment]))
-        notice "Set comment on #{String(@resource[:name])}"
+      if @resource[:comment]
+        unless share.caption == String(@resource[:comment])
+          share.setshareinfo(nil, String(@resource[:comment]))
+          notice "Set comment on #{String(@resource[:name])}"
+        end
       end
       return true
     else
