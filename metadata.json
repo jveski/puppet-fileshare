@@ -8,8 +8,5 @@
     "project_page": "https://github.com/jolshevski/jordan-fileshare",
     "issues_url": "https://github.com/jolshevski/jordan-fileshare/issues",
     "description": "Manages Windows File Shares",
-    "dependencies": [
-  {
-  }
-  ]
+    "dependencies": []
 }
