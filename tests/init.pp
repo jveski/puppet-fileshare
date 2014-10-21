@@ -1,14 +1,13 @@
 if $::osfamily == 'Windows' {
 
-  file {'c:/test':
+  file { 'c:/test':
     ensure => directory,
   }
 
-  fileshare {'temptest':
+  fileshare { 'temptest':
     ensure      => present,
     path        => 'c:/test',
-    comment     => 'test comment',
-    max_con     =>  0,
+    comment     => 'test comment...',
   }
 }
 else {

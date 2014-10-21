@@ -21,14 +21,4 @@ Puppet::Type.newtype(:fileshare) do
   newparam(:comment) do
     desc "An optional comment about the file share for fellow humans."
   end
-
-  newparam(:max_con) do
-    desc "An optional limit of maximum concurrent connections."
-    validate do |value|
-      unless value =~ /\d+$/
-        raise ArgumentError, 'Max connections must be expressed in a number.' % value
-      end
-    end
-  end
-
 end
