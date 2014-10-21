@@ -49,7 +49,7 @@ Puppet::Type.type(:fileshare).provide(:windows) do
       if @resource[:comment]
         unless share.caption == String(@resource[:comment])
           share.setshareinfo(nil, String(@resource[:comment]))
-          notice "Set comment on #{String(@resource[:name])}"
+          notice "Set comment"
         end
       end
       return true

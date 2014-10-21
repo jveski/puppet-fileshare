@@ -25,7 +25,7 @@ class Puppet::Provider::Fileshare
         wmi = WIN32OLE.connect('winmgmts://localhost/root/cimv2')
         share = wmi.get("Win32_LogicalShareSecuritySetting='#{share_name}'")
         share.setsecuritydescriptor(everyone_full_sd)
-        notice ("Set ACL for file share #{share_name}")
+        notice ("Set ACL")
       end
 
       # Gets a share's DACL object
