@@ -7,6 +7,6 @@ task :validate do
     sh "puppet parser validate --noop #{manifest}"
   end
   Dir['**/*.rb'].each do |file|
-    puts file
+    sh "ruby-lint #{file} -a pedantics"
   end
 end
