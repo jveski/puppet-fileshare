@@ -1,11 +1,14 @@
-require 'win32ole'
-require 'pathname'
-
 Puppet::Type.type(:fileshare).provide(:windows) do
   desc "Create/Destroy Windows File Shares"
   confine :operatingsystem => :windows
   defaultfor :operatingsystem => :windows
 
+  # This fixes preloading on the master
+  if Facter['osfamily'].value == 'windows'
+    require 'win32ole'
+  end
+
+  require 'pathname'
   require Pathname.new(__FILE__).dirname + '../../../' + 'puppet/provider/fileshare/windows/security'
   include Puppet::Provider::Fileshare::Windows::Security
 
