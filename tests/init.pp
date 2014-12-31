@@ -1,15 +1,9 @@
-if $::osfamily == 'Windows' {
-
-  file { 'c:/test':
-    ensure => directory,
-  }
-
-  fileshare { 'temptest':
-    ensure  => present,
-    path    => 'c:/test',
-    comment => 'test comment...',
-  }
+file { 'c:/test':
+  ensure => directory,
 }
-else {
-  fail('Fileshare only supports Windows for the time being')
+
+fileshare { 'temptest':
+  ensure  => present,
+  path    => 'c:/test',
+  comment => 'test comment...',
 }

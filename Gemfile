@@ -1,5 +1,4 @@
 source :rubygems
+
 gem 'puppet'
-gem 'ruby-lint'
-gem 'puppet-lint'
-gem 'rake'
+gem 'puppetlabs_spec_helper'
