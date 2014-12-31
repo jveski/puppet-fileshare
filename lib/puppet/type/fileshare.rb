@@ -12,7 +12,7 @@ Puppet::Type.newtype(:fileshare) do
   newparam(:path) do
     desc "Path to the shared directory."
     validate do |value|
-      unless value =~ /[a-z]|[A-Z][:]\//
+      unless value =~ /([a-z]|[A-Z])[:]\//
         raise ArgumentError, 'Share path must be valid, absolute file path' % value
       end
     end
