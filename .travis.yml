@@ -1,2 +1,5 @@
 language: ruby
-script: "rake validate"
+script:
+  - "rake spec"
+  - "rake validate"
+  - "rake lint"
