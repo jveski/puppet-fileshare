@@ -3,7 +3,7 @@ Puppet::Type.type(:fileshare).provide(:windows) do
   confine :operatingsystem => :windows
   defaultfor :operatingsystem => :windows
 
-  # This fixes preloading on the master
+  # This fixes preloading when compiling on the master
   if Facter['osfamily'].value == 'windows'
     require 'win32ole'
   end
@@ -15,10 +15,12 @@ Puppet::Type.type(:fileshare).provide(:windows) do
   def create
     wmi = WIN32OLE.connect("winmgmts:Win32_Share")
     creator = wmi.Create(String(@resource[:path]), String(@resource[:name]), 0, nil, String(@resource[:comment]))
+
     # If the WMI call doesn't return 0, raise an error containing the appropriate message
     unless creator == 0
       raise(return_values[creator])
     end
+
     # Give Everyone full access
     set_acl @resource[:name]
   end
@@ -26,6 +28,7 @@ Puppet::Type.type(:fileshare).provide(:windows) do
   def destroy
     wmi = WIN32OLE.connect('winmgmts://localhost/root/cimv2')
     destroyer = wmi.Get("Win32_Share='#{String(@resource[:name])}'").delete
+
     # If the WMI call doesn't return 0, raise an error containing the appropriate message
     unless destroyer == 0
       raise(return_values[return_values])
