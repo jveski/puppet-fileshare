@@ -25,6 +25,14 @@ describe Puppet::Type.type(:fileshare).provider(:windows) do
       expect { resource[:path] = "c:/path/here" }.to_not raise_error
     end
 
+    it "should allow forward slashes in the path" do
+      expect { resource[:path] = "c:/path/here" }.to_not raise_error
+    end
+
+    it "should allow back slashes in the path" do
+      expect { resource[:path] = "C:\\path\\here" }.to_not raise_error
+    end
+
     it "should allow setting of comment" do
       resource[:comment] = "testcomment"
       expect(resource[:comment]).to eq("testcomment")
