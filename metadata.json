@@ -1,6 +1,6 @@
 {
   "name": "jordan-fileshare",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "author": "Jordan Olshevski",
     "summary": "Manages Windows File Shares",
     "license": "Apache-2.0",
