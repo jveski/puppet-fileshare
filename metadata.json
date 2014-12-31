@@ -3,12 +3,13 @@
     "version": "1.0.1",
     "author": "Jordan Olshevski",
     "summary": "Manages Windows File Shares",
-    "license": "Apache License, Version 2.0",
+    "license": "Apache-2.0",
     "source": "https://github.com/jolshevski/jordan-fileshare",
     "project_page": "https://github.com/jolshevski/jordan-fileshare",
     "issues_url": "https://github.com/jolshevski/jordan-fileshare/issues",
     "description": "Manages Windows File Shares",
-    "dependencies": [],
+    "dependencies": [
+    ],
       "operatingsystem_support": [
       {
         "operatingsystem": "Windows",
