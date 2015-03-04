@@ -1,26 +1,23 @@
 {
   "name": "jordan-fileshare",
-    "version": "1.1.1",
-    "author": "Jordan Olshevski",
-    "summary": "Manages Windows File Shares",
-    "license": "Apache-2.0",
-    "source": "https://github.com/jolshevski/jordan-fileshare",
-    "project_page": "https://github.com/jolshevski/jordan-fileshare",
-    "issues_url": "https://github.com/jolshevski/jordan-fileshare/issues",
-    "description": "Manages Windows File Shares",
-    "dependencies": [
-    ],
-      "operatingsystem_support": [
-      {
-        "operatingsystem": "Windows",
-        "operatingsystemrelease": [
-        "Server 2008",
+  "version": "2.0.0",
+  "author": "Jordan Olshevski",
+  "summary": "Manage Windows File Shares",
+  "license": "Apache-2.0",
+  "source": "https://github.com/jolshevski/jordan-fileshare",
+  "project_page": "https://github.com/jolshevski/jordan-fileshare",
+  "issues_url": "https://github.com/jolshevski/jordan-fileshare/issues",
+  "description": "Manage Windows File Shares",
+  "dependencies": [
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Windows",
+      "operatingsystemrelease": [
         "Server 2008 R2",
         "Server 2012",
-        "Server 2012 R2",
-        "7",
-        "8"
-          ]
-      }
+        "Server 2012 R2"
+      ]
+    }
   ]
 }
