@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe Puppet::Type.type(:fileshare).provider(:windows) do
-  let (:resource) { Puppet::Type.type(:fileshare).new(:provider => :windows, :name => "test_fileshare") }
-  let (:provider) { resource.provider }
+  let (:resource) { Puppet::Type.type(:fileshare).new(:provider => :wmi, :name => "test_fileshare") }
 
-  context "when validating parameters" do
+  context "when setting name" do
     it "should throw an error for an invalid name" do
       expect { resource[:name] = "test*&^illegal!@#name" }.to raise_error(Puppet::ResourceError, /must not contain/)
     end
@@ -13,8 +12,10 @@ describe Puppet::Type.type(:fileshare).provider(:windows) do
       expect { resource[:name] = "alegitsharename" }.to_not raise_error
     end
 
+  end
+  context "when setting path" do
     it "should throw an error for an absolute posix-style path" do
-      expect { resource[:path] = "/posix/path/here" }.to raise_error(Puppet::ResourceError, /absolute file path/)
+      expect { resource[:path] = "/posix/path/here" }.to raise_error(Puppet::ResourceError, /must be fully qualified/)
     end
 
     it "should allow absolute windows paths with capital drive letters" do
@@ -32,10 +33,21 @@ describe Puppet::Type.type(:fileshare).provider(:windows) do
     it "should allow back slashes in the path" do
       expect { resource[:path] = "C:\\path\\here" }.to_not raise_error
     end
+  end
 
+  context "when setting comment" do
     it "should allow setting of comment" do
-      resource[:comment] = "testcomment"
-      expect(resource[:comment]).to eq("testcomment")
+      expect { resource[:comment] = "testcomment" }.to_not raise_error
+    end
+  end
+
+  context "when setting maxcon" do
+    it "should allow integer" do
+      expect { resource[:maxcon] = 12 }.to_not raise_error
+    end
+
+    it "should not allow string" do
+      expect { resource[:maxcon] = "teststring" }.to raise_error(Puppet::ResourceError, /expressed as an integer/)
     end
   end
 end
