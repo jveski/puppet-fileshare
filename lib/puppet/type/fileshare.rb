@@ -15,6 +15,9 @@ Puppet::Type.newtype(:fileshare) do
       unless Puppet::Util.absolute_path?(value, :windows)
         fail Puppet::Error, "File paths must be fully qualified, not '#{value}'"
       end
+      if value =~ /\/$/
+        fail Puppet::Error, "File paths must not end with a forward slash"
+      end
     end
   end
 

@@ -11,11 +11,15 @@ describe Puppet::Type.type(:fileshare).provider(:windows) do
     it "should allow a valid name" do
       expect { resource[:name] = "alegitsharename" }.to_not raise_error
     end
-
   end
+
   context "when setting path" do
     it "should throw an error for an absolute posix-style path" do
       expect { resource[:path] = "/posix/path/here" }.to raise_error(Puppet::ResourceError, /must be fully qualified/)
+    end
+
+    it "should throw an error for a path ending in a forward slash" do
+      expect { resource[:path] = "C:/trailing/slash/" }.to raise_error(Puppet::ResourceError, /not end with a forward slash/)
     end
 
     it "should allow absolute windows paths with capital drive letters" do
