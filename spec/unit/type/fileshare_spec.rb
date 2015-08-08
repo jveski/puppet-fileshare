@@ -1,7 +1,6 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
 
 describe Puppet::Type.type(:fileshare) do
-  let (:fileshare) { Puppet::Type.type(:fileshare).new(:name => "test_share") }
 
   context "when setting name" do
     it "should throw an error for an invalid name" do
