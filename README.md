@@ -1,8 +1,8 @@
 #fileshare
-[![Build Status](https://travis-ci.org/jolshevski/jordan-fileshare.svg?branch=master)](https://travis-ci.org/jolshevski/jordan-fileshare)
+[![Build Status](https://travis-ci.org/jolshevski/fileshare.svg)](https://travis-ci.org/jolshevski/fileshare)
 
 ## Overview
-Manage Windows file shares with Puppet.
+A type/provider for managing Windows file shares with Puppet.
 
 ## Attributes
   * `ensure`  - Present/absent
@@ -16,9 +16,26 @@ This module ensures by default that shares allow full control access to everyone
 
 ## Usage
 ```puppet
-fileshare { 'test_share_name':
+fileshare { 'the_file_share':
+  ensure  => present,
+  path    => 'C:\test',
+}
+```
+
+### With Comment
+```puppet
+fileshare { 'the_file_share':
   ensure  => present,
   path    => 'C:\test',
   comment => 'Optional Comment String Goes Here',
+}
+```
+
+### With Capped Concurrent Connections
+```puppet
+fileshare { 'the_file_share':
+  ensure  => present,
+  path    => 'C:\test',
+  maxcon  => '10',
 }
 ```
