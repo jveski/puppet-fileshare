@@ -13,6 +13,18 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   TrusteeType = 'Win32_Trustee'
   SDType = 'Win32_SecurityDescriptor'
   SecuritySettingsType = 'Win32_LogicalShareSecuritySetting'
+  ExitCodes = {
+    0 => "success",
+    2 => "access denied",
+    8 => "unknown failure",
+    9 => "invalid name",
+    10 => "invalid level",
+    21 => "invalid parameter",
+    22 => "duplicate share",
+    23 => "redirected path",
+    24 => "unknown directory",
+    25 => "net name not found",
+  }
 
   def create
     eval WIN32OLE.connect(OLEPrefix + ShareType).create(@resource[:path], @resource[:name], *CreationDefaults)
@@ -76,19 +88,7 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   private
 
   def eval(action)
-    return_values = {
-      0 => "success",
-      2 => "access denied",
-      8 => "unknown failure",
-      9 => "invalid name",
-      10 => "invalid level",
-      21 => "invalid parameter",
-      22 => "duplicate share",
-      23 => "redirected path",
-      24 => "unknown directory",
-      25 => "net name not found",
-    }
-    raise(return_values[action]) unless action == 0
+    raise(ExitCodes[action]) unless action == 0
   end
 
   def name
