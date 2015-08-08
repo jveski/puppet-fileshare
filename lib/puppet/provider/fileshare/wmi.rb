@@ -87,7 +87,7 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   private
 
   def eval(action)
-    raise(ExitCodes[action]) unless action == 0
+    raise(Puppet::Error, ExitCodes[action]) unless action == 0
   end
 
   def name
