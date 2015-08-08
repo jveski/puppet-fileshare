@@ -36,63 +36,63 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
     context "when the wmi method returns 2" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(2)
-        expect{provider.create}.to raise_error(/access denied/)
+        expect{provider.create}.to raise_error(/Access Denied/)
       end
     end
 
     context "when the wmi method returns 8" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(8)
-        expect{provider.create}.to raise_error(/unknown failure/)
+        expect{provider.create}.to raise_error(/Unknown Failure/)
       end
     end
 
     context "when the wmi method returns 9" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(9)
-        expect{provider.create}.to raise_error(/invalid name/)
+        expect{provider.create}.to raise_error(/Invalid Name/)
       end
     end
 
     context "when the wmi method returns 10" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(10)
-        expect{provider.create}.to raise_error(/invalid level/)
+        expect{provider.create}.to raise_error(/Invalid Level/)
       end
     end
 
     context "when the wmi method returns 21" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(21)
-        expect{provider.create}.to raise_error(/invalid parameter/)
+        expect{provider.create}.to raise_error(/Invalid Parameter/)
       end
     end
 
     context "when the wmi method returns 22" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(22)
-        expect{provider.create}.to raise_error(/duplicate share/)
+        expect{provider.create}.to raise_error(/Duplicate Share/)
       end
     end
 
     context "when the wmi method returns 23" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(23)
-        expect{provider.create}.to raise_error(/redirected path/)
+        expect{provider.create}.to raise_error(/Redirected Path/)
       end
     end
 
     context "when the wmi method returns 24" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(24)
-        expect{provider.create}.to raise_error(/unknown directory/)
+        expect{provider.create}.to raise_error(/Unknown Directory/)
       end
     end
 
     context "when the wmi method returns 25" do
       it "should raise the appropriate message" do
         the_ole.stubs(:create).returns(25)
-        expect{provider.create}.to raise_error(/net name not found/)
+        expect{provider.create}.to raise_error(/Net Name Not Found/)
       end
     end
   end
@@ -117,7 +117,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(2)
-        expect{provider.destroy}.to raise_error(/access denied/)
+        expect{provider.destroy}.to raise_error(/Access Denied/)
       end
     end
 
@@ -125,7 +125,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(8)
-        expect{provider.destroy}.to raise_error(/unknown failure/)
+        expect{provider.destroy}.to raise_error(/Unknown Failure/)
       end
     end
 
@@ -133,7 +133,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(9)
-        expect{provider.destroy}.to raise_error(/invalid name/)
+        expect{provider.destroy}.to raise_error(/Invalid Name/)
       end
     end
 
@@ -141,7 +141,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(10)
-        expect{provider.destroy}.to raise_error(/invalid level/)
+        expect{provider.destroy}.to raise_error(/Invalid Level/)
       end
     end
 
@@ -149,7 +149,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(21)
-        expect{provider.destroy}.to raise_error(/invalid parameter/)
+        expect{provider.destroy}.to raise_error(/Invalid Parameter/)
       end
     end
 
@@ -157,7 +157,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(22)
-        expect{provider.destroy}.to raise_error(/duplicate share/)
+        expect{provider.destroy}.to raise_error(/Duplicate Share/)
       end
     end
 
@@ -165,7 +165,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(23)
-        expect{provider.destroy}.to raise_error(/redirected path/)
+        expect{provider.destroy}.to raise_error(/Redirected Path/)
       end
     end
 
@@ -173,7 +173,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(24)
-        expect{provider.destroy}.to raise_error(/unknown directory/)
+        expect{provider.destroy}.to raise_error(/Unknown Directory/)
       end
     end
 
@@ -181,7 +181,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       it "should raise the appropriate message" do
         the_ole.stubs(:get).returns(the_wmi)
         the_wmi.stubs(:delete).returns(25)
-        expect{provider.destroy}.to raise_error(/net name not found/)
+        expect{provider.destroy}.to raise_error(/Net Name Not Found/)
       end
     end
   end

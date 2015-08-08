@@ -14,16 +14,15 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   SDType = 'Win32_SecurityDescriptor'
   SecuritySettingsType = 'Win32_LogicalShareSecuritySetting'
   ExitCodes = {
-    0 => "success",
-    2 => "access denied",
-    8 => "unknown failure",
-    9 => "invalid name",
-    10 => "invalid level",
-    21 => "invalid parameter",
-    22 => "duplicate share",
-    23 => "redirected path",
-    24 => "unknown directory",
-    25 => "net name not found",
+    2 => "Access Denied",
+    8 => "Unknown Failure",
+    9 => "Invalid Name",
+    10 => "Invalid Level",
+    21 => "Invalid Parameter",
+    22 => "Duplicate Share",
+    23 => "Redirected Path",
+    24 => "Unknown Directory",
+    25 => "Net Name Not Found",
   }
 
   def create
