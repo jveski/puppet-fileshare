@@ -1,12 +1,12 @@
 {
-  "name": "jordan-fileshare",
+  "name": "fileshare",
   "version": "2.0.1",
   "author": "Jordan Olshevski",
   "summary": "Manage Windows File Shares",
   "license": "Apache-2.0",
-  "source": "https://github.com/jolshevski/jordan-fileshare",
-  "project_page": "https://github.com/jolshevski/jordan-fileshare",
-  "issues_url": "https://github.com/jolshevski/jordan-fileshare/issues",
+  "source": "https://github.com/jolshevski/fileshare",
+  "project_page": "https://github.com/jolshevski/fileshare",
+  "issues_url": "https://github.com/jolshevski/fileshare/issues",
   "description": "Manage Windows File Shares",
   "dependencies": [
   ],
