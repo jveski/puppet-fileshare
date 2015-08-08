@@ -13,7 +13,7 @@ Manage Windows file shares with Puppet.
   * `maxcon`  - Maximum allowed connections.  Defaults to 16777216.
 
 ## Usage
-```
+```puppet
 fileshare { 'test_share_name':
   ensure  => present,
   path    => 'C:\test',
