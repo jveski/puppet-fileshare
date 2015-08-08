@@ -2,12 +2,12 @@
   "name": "fileshare",
   "version": "2.0.1",
   "author": "Jordan Olshevski",
-  "summary": "Manage Windows File Shares",
+  "summary": "Manage Windows file shares",
   "license": "Apache-2.0",
   "source": "https://github.com/jolshevski/fileshare",
   "project_page": "https://github.com/jolshevski/fileshare",
   "issues_url": "https://github.com/jolshevski/fileshare/issues",
-  "description": "Manage Windows File Shares",
+  "description": "Manage Windows file shares",
   "dependencies": [
   ],
   "operatingsystem_support": [
