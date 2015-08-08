@@ -1,68 +1,98 @@
+require 'win32ole' if Facter['osfamily'].value == 'windows'
+
 Puppet::Type.type(:fileshare).provide(:wmi) do
   desc "Manage Windows File Shares"
   confine :operatingsystem => :windows
   defaultfor :operatingsystem => :windows
 
-  require File.expand_path("../wmi/fileshare", __FILE__)
-  require File.expand_path("../wmi/securitydescriptor", __FILE__)
+  OLEPrefix = 'winmgmts:'
+  ShareType = 'Win32_Share'
+  CIMV2 = '//localhost/root/cimv2'
+  SD = 4
+  CreationDefaults = [0, nil, nil]
+  TrusteeType = 'Win32_Trustee'
+  SDType = 'Win32_SecurityDescriptor'
+  SecuritySettingsType = 'Win32_LogicalShareSecuritySetting'
 
   def create
-    obj = Fileshare.new(@resource[:name])
-    obj.path = @resource[:path]
-    obj.create
-
-    # Ensure the properties have been managed
-    self.owner = @resource.should(:owner) unless self.owner == @resource.should(:owner)
-    self.comment = @resource.should(:comment) unless self.comment == @resource.should(:comment)
-    self.maxcon = @resource.should(:maxcon) unless self.maxcon == @resource.should(:maxcon)
+    eval WIN32OLE.connect(OLEPrefix + ShareType).create(@resource[:path], @resource[:name], *CreationDefaults)
+    # TODO: Find a way to initialize with the correct attributes
   end
 
   def destroy
-    Fileshare.new(@resource[:name]).delete
+    eval WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).delete
   end
 
   def exists?
-    Fileshare.new(@resource[:name]).exists?
+    begin
+      WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name)
+      true
+    rescue
+      false
+    end
   end
 
   def owner
-    share = Fileshare.new(@resource[:name])
-    return :absent unless share.dacl[0]
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(SecuritySettingsType + name).getsecuritydescriptor(SD)
+    dacl = WIN32OLE::ARGV[0].DACL[0]
+
+    return :absent unless dacl
+
     {
-      'accessmask' => String(share.dacl[0].accessmask),
-      'sid' => share.dacl[0].trustee.sid,
-      'username' => share.dacl[0].trustee.name,
+      'accessmask' => String(dacl.accessmask),
+      'sid' => dacl.trustee.sid,
+      'username' => dacl.trustee.name,
     }
   end
 
   def owner=(owner_hash)
-    share = Fileshare.new(@resource[:name])
-    sd = SecurityDescriptor.new
-    sd.username = owner_hash['username']
-    sd.sid = owner_hash['sid']
-    share.sd = sd.sd
+    trustee = WIN32OLE.connect(OLEPrefix + CIMV2).get(TrusteeType).spawninstance_
+    trustee.name = owner_hash['username']
+    trustee.sid = owner_hash['sid']
+
+    sd = WIN32OLE.connect(OLEPrefix + CIMV2).get(SDType).spawninstance_
+    sd.controlflags = 4
+    sd.owner = trustee
+
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(SecuritySettingsType + name).setsecuritydescriptor(sd)
   end
 
   def comment
-    obj = Fileshare.new(@resource[:name])
-    return :absent unless obj.comment
-    obj.comment
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).description || :absent
   end
 
   def comment=(string)
-    obj = Fileshare.new(@resource[:name])
-    obj.comment = string
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(maxcon, string)
   end
 
   def maxcon
-    obj = Fileshare.new(@resource[:name])
-    return :absent unless obj.maxcon
-    obj.maxcon
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).maximumallowed || :absent
   end
 
   def maxcon=(int)
-    obj = Fileshare.new(@resource[:name])
-    obj.maxcon = int
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(int, comment)
+  end
+
+  private
+
+  def eval(action)
+    return_values = {
+      0 => "success",
+      2 => "access denied",
+      8 => "unknown failure",
+      9 => "invalid name",
+      10 => "invalid level",
+      21 => "invalid parameter",
+      22 => "duplicate share",
+      23 => "redirected path",
+      24 => "unknown directory",
+      25 => "net name not found",
+    }
+    raise(return_values[action]) unless action == 0
+  end
+
+  def name
+    "='" + @resource[:name] + "'"
   end
 
 end
