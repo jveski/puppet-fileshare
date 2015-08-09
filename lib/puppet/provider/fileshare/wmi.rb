@@ -27,7 +27,9 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
 
   def create
     eval WIN32OLE.connect(OLEPrefix + ShareType).create(@resource[:path], @resource[:name], *CreationDefaults)
-    # TODO: Find a way to initialize with the correct attributes
+    self.owner = @resource[:owner] if @resource[:owner]
+    self.comment = @resource[:comment] if @resource[:comment]
+    self.maxcon = @resource[:maxcon] if @resource[:maxcon]
   end
 
   def destroy

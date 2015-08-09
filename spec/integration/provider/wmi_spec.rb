@@ -20,16 +20,50 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
   end
 
   describe ".create" do
-    it "should create the file share" do
+    it "should create the file share and set the owner" do
       WIN32OLE.expects(:connect).with('winmgmts:Win32_Share').returns(the_ole)
       the_ole.expects(:create).with(nil, 'windows_fileshare', 0, nil, nil).returns(0)
+
+      the_ole.expects(:get).with('Win32_SecurityDescriptor').returns(the_sd)
+      the_ole.expects(:get).with('Win32_Trustee').returns(the_trustee)
+      the_ole.expects(:get).with("Win32_LogicalShareSecuritySetting='windows_fileshare'").returns(the_sg)
+      the_sd.expects(:spawninstance_).returns(the_sd)
+      the_trustee.expects(:spawninstance_).returns(the_trustee)
+      the_sd.expects(:controlflags=).with(4)
+      the_trustee.expects(:name=).with('Everyone')
+      the_trustee.expects(:sid=).with([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0])
+      the_sd.expects(:owner=).with(the_trustee)
+      the_sg.expects(:setsecuritydescriptor).with(the_sd)
+      the_ole.expects(:get).at_least_once.with("Win32_Share='windows_fileshare'").returns(the_wmi)
+      the_wmi.expects(:description)
+      the_wmi.expects(:setshareinfo).with(16777216, :absent)
+
       provider.create
     end
 
-    context "when the wmi method returns 0" do
-      it "should raise the appropriate message" do
-        the_ole.stubs(:create).returns(0)
-        expect{provider.create}.to_not raise_error
+    context "when the comment is set" do
+      let(:resource) { Puppet::Type.type(:fileshare).new(:provider => :wmi, :name => "windows_fileshare", :comment => 'the comment') }
+      it "should create the file share and set the comment" do
+        WIN32OLE.expects(:connect).with('winmgmts:Win32_Share').returns(the_ole)
+        the_ole.expects(:create).with(nil, 'windows_fileshare', 0, nil, nil).returns(0)
+
+        the_ole.expects(:get).with('Win32_SecurityDescriptor').returns(the_sd)
+        the_ole.expects(:get).with('Win32_Trustee').returns(the_trustee)
+        the_ole.expects(:get).with("Win32_LogicalShareSecuritySetting='windows_fileshare'").returns(the_sg)
+        the_sd.expects(:spawninstance_).returns(the_sd)
+        the_trustee.expects(:spawninstance_).returns(the_trustee)
+        the_sd.expects(:controlflags=).with(4)
+        the_trustee.expects(:name=).with('Everyone')
+        the_trustee.expects(:sid=).with([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0])
+        the_sd.expects(:owner=).with(the_trustee)
+        the_sg.expects(:setsecuritydescriptor).with(the_sd)
+        the_ole.expects(:get).at_least_once.with("Win32_Share='windows_fileshare'").returns(the_wmi)
+        the_wmi.expects(:maximumallowed)
+        the_wmi.expects(:description)
+        the_wmi.expects(:setshareinfo).with(:absent, 'the comment')
+        the_wmi.expects(:setshareinfo).with(16777216, :absent)
+
+        provider.create
       end
     end
 
