@@ -35,8 +35,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       the_sd.expects(:owner=).with(the_trustee)
       the_sg.expects(:setsecuritydescriptor).with(the_sd)
       the_ole.expects(:get).at_least_once.with("Win32_Share='windows_fileshare'").returns(the_wmi)
-      the_wmi.expects(:description)
-      the_wmi.expects(:setshareinfo).with(16777216, :absent)
+      the_wmi.expects(:setshareinfo).with(16777216, nil)
 
       provider.create
     end
@@ -58,10 +57,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
         the_sd.expects(:owner=).with(the_trustee)
         the_sg.expects(:setsecuritydescriptor).with(the_sd)
         the_ole.expects(:get).at_least_once.with("Win32_Share='windows_fileshare'").returns(the_wmi)
-        the_wmi.expects(:maximumallowed)
-        the_wmi.expects(:description)
-        the_wmi.expects(:setshareinfo).with(:absent, 'the comment')
-        the_wmi.expects(:setshareinfo).with(16777216, :absent)
+        the_wmi.expects(:setshareinfo).with(16777216, 'the comment')
 
         provider.create
       end
