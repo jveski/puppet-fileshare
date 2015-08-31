@@ -4,9 +4,9 @@
   "author": "Jordan Olshevski",
   "summary": "Manage Windows file shares",
   "license": "Apache-2.0",
-  "source": "https://github.com/jolshevski/fileshare",
-  "project_page": "https://github.com/jolshevski/fileshare",
-  "issues_url": "https://github.com/jolshevski/fileshare/issues",
+  "source": "https://github.com/jolshevski/puppet-fileshare",
+  "project_page": "https://github.com/jolshevski/puppet-fileshare",
+  "issues_url": "https://github.com/jolshevski/puppet-fileshare/issues",
   "description": "Manage Windows file shares",
   "dependencies": [
   ],

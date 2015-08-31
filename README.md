@@ -1,5 +1,5 @@
 #fileshare
-[![Build Status](https://travis-ci.org/jolshevski/fileshare.svg)](https://travis-ci.org/jolshevski/fileshare)
+[![Build Status](https://travis-ci.org/jolshevski/puppet-fileshare.svg)](https://travis-ci.org/jolshevski/puppet-fileshare)
 
 ## Overview
 A type/provider for managing Windows file shares with Puppet.
