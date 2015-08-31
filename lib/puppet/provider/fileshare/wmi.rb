@@ -1,4 +1,4 @@
-require 'win32ole' rescue nil
+begin; require 'win32ole'; rescue Exception; end
 
 Puppet::Type.type(:fileshare).provide(:wmi) do
   desc "Manage Windows File Shares"
