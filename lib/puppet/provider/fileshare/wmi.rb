@@ -1,4 +1,4 @@
-require 'win32ole' if Facter['osfamily'].value == 'windows'
+require 'win32ole' rescue nil
 
 Puppet::Type.type(:fileshare).provide(:wmi) do
   desc "Manage Windows File Shares"
