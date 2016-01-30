@@ -8,7 +8,7 @@ file { 'C:\share\test.txt':
 }
 
 fileshare { 'test':
-  ensure  => present,
-  path    => 'C:\share',
-  maxcon  => '10',
+  ensure => present,
+  path   => 'C:\share',
+  maxcon => '10',
 }
