@@ -10,5 +10,5 @@ file { 'C:\share\test.txt':
 fileshare { 'test':
   ensure => present,
   path   => 'C:\share',
-  maxcon => '10',
+  maxcon => 10,
 }

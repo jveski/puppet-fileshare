@@ -77,7 +77,7 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
       hash
     end
 
-    def to_wmi_object
+    def to_trustee
       trustee = WIN32OLE.connect('winmgmts://localhost/root/cimv2').get('Win32_Trustee').spawninstance_
       trustee.name = self['username']
       trustee.sid = self['sid']
@@ -87,7 +87,7 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
     def to_sd
       sd = WIN32OLE.connect('winmgmts://localhost/root/cimv2').get('Win32_SecurityDescriptor').spawninstance_
       sd.controlflags = 4
-      sd.owner = to_wmi_object
+      sd.owner = to_trustee
       sd
     end
   end
@@ -112,5 +112,4 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   def name_slug
     "='" + @resource[:name] + "'"
   end
-
 end
