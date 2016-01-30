@@ -1,0 +1,12 @@
+environment:
+  matrix:
+  - AGENT_VERSION: 1.3.2
+  - AGENT_VERSION: 1.2.7
+  - AGENT_VERSION: 1.2.6
+install:
+- SET PATH=C:\Ruby21\bin;%PATH%
+- bundle install
+- choco install puppet-agent --version %AGENT_VERSION%
+build: off
+test_script:
+- bundle exec rake acceptance

@@ -1,5 +1,6 @@
 #fileshare
 [![Build Status](https://travis-ci.org/jolshevski/puppet-fileshare.svg)](https://travis-ci.org/jolshevski/puppet-fileshare)
+[![Build status](https://ci.appveyor.com/api/projects/status/s08qgb4egku0pa3d?svg=true)
 
 ## Overview
 A type/provider for managing Windows file shares with Puppet.
