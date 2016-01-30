@@ -26,13 +26,27 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
   let(:trustee) { mock('trustee') }
 
   before do
-    WIN32OLE.stubs(:connect).returns(ole)
-    WIN32OLE.stubs(:connect).with('winmgmts://localhost/root/cimv2').returns(ole)
+    WIN32OLE.stubs(:connect).at_least_once.returns(ole)
   end
 
   it "can create a share" do
     WIN32OLE.expects(:connect).with('winmgmts:Win32_Share').returns(ole)
-    ole.expects(:create).with(nil, 'windows_fileshare', 0, nil, nil).returns(0)
+    ole.expects(:create).at_least_once.with(nil, 'windows_fileshare', 0, nil, nil).returns(0)
+
+    ole.expects(:get).with('Win32_SecurityDescriptor').returns(sd)
+    ole.expects(:get).with('Win32_Trustee').returns(trustee)
+    ole.expects(:get).with("Win32_LogicalShareSecuritySetting='windows_fileshare'").returns(sg)
+    sd.expects(:spawninstance_).returns(sd)
+    trustee.expects(:spawninstance_).returns(trustee)
+    sd.expects(:controlflags=).with(4)
+    trustee.expects(:name=).with('Everyone')
+    trustee.expects(:sid=).with([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0])
+    sd.expects(:owner=).with(trustee)
+    sg.expects(:setsecuritydescriptor).with(sd)
+
+    ole.expects(:get).at_least_once.with("Win32_Share='windows_fileshare'").returns(share)
+    share.expects(:setshareinfo).at_least_once.with(123, 'stub comment')
+
     provider.create
   end
 
@@ -106,8 +120,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
 
   it "can set the comment" do
     ole.expects(:get).at_least_once.with("Win32_Share='windows_fileshare'").returns(share)
-    share.expects(:maximumallowed).at_least_once.returns('the max')
-    share.expects(:setshareinfo).with('the max', 'the comment')
+    share.expects(:setshareinfo).with(123, 'the comment')
     provider.comment = "the comment"
   end
 
@@ -131,8 +144,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
 
   it "can set the maxcon" do
     ole.expects(:get).at_least_once.with("Win32_Share='windows_fileshare'").returns(share)
-    share.expects(:description).returns(:comment)
-    share.expects(:setshareinfo).with(:maxcon, :comment)
+    share.expects(:setshareinfo).with(:maxcon, 'stub comment')
     provider.maxcon = :maxcon
   end
 
@@ -153,5 +165,4 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
       end
     end
   end
-
 end

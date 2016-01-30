@@ -27,9 +27,9 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
 
   def create
     eval WIN32OLE.connect(OLEPrefix + ShareType).create(@resource[:path], @resource[:name], *CreationDefaults)
-    owner = @resource[:owner]
-    maxcon = @resource[:maxcon]
-    comment = @resource[:comment]
+    self.owner = @resource[:owner]
+    self.maxcon = @resource[:maxcon]
+    self.comment = @resource[:comment]
   end
 
   def destroy
@@ -75,7 +75,7 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   end
 
   def comment=(string)
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(maxcon, string)
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(@resource[:maxcon], string)
   end
 
   def maxcon
@@ -83,7 +83,7 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   end
 
   def maxcon=(int)
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(int, comment)
+    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(int, @resource[:comment])
   end
 
   private
