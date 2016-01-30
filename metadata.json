@@ -1,13 +1,13 @@
 {
   "name": "jordan-fileshare",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "author": "Jordan Olshevski",
-  "summary": "Manage Windows file shares",
+  "summary": "A Puppet resource type for managing Windows file shares",
   "license": "Apache-2.0",
   "source": "https://github.com/jolshevski/puppet-fileshare",
   "project_page": "https://github.com/jolshevski/puppet-fileshare",
   "issues_url": "https://github.com/jolshevski/puppet-fileshare/issues",
-  "description": "Manage Windows file shares",
+  "description": "Manage Windows file shares with Puppet",
   "dependencies": [
   ],
   "operatingsystem_support": [
