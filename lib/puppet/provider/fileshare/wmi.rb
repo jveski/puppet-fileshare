@@ -1,18 +1,10 @@
 begin; require 'win32ole'; rescue Exception; end
 
 Puppet::Type.type(:fileshare).provide(:wmi) do
-  desc "Manage Windows File Shares"
+  desc "Manage Windows file shares"
   confine :operatingsystem => :windows
   defaultfor :operatingsystem => :windows
 
-  OLEPrefix = 'winmgmts:'
-  ShareType = 'Win32_Share'
-  CIMV2 = '//localhost/root/cimv2'
-  SD = 4
-  CreationDefaults = [0, nil, nil]
-  TrusteeType = 'Win32_Trustee'
-  SDType = 'Win32_SecurityDescriptor'
-  SecuritySettingsType = 'Win32_LogicalShareSecuritySetting'
   ExitCodes = {
     2 => "Access Denied",
     8 => "Unknown Failure",
@@ -26,73 +18,98 @@ Puppet::Type.type(:fileshare).provide(:wmi) do
   }
 
   def create
-    eval WIN32OLE.connect(OLEPrefix + ShareType).create(@resource[:path], @resource[:name], *CreationDefaults)
+    handle_wmi_error do
+      wmi('winmgmts:Win32_Share').create(@resource[:path], @resource[:name], 0, nil, nil)
+    end
+
     self.owner = @resource[:owner]
     self.maxcon = @resource[:maxcon]
     self.comment = @resource[:comment]
   end
 
   def destroy
-    eval WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).delete
-  end
-
-  def exists?
-    begin
-      WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name)
-      true
-    rescue
-      false
+    handle_wmi_error do
+      wmi.get("Win32_Share#{name_slug}").delete
     end
   end
 
+  def exists?
+    begin; wmi.get("Win32_Share#{name_slug}"); rescue; return false; end
+    true
+  end
+
   def owner
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(SecuritySettingsType + name).getsecuritydescriptor(SD)
+    wmi.get("Win32_LogicalShareSecuritySetting#{name_slug}").getsecuritydescriptor(4)
     dacl = WIN32OLE::ARGV[0].DACL[0]
 
     return :absent unless dacl
 
-    {
-      'accessmask' => String(dacl.accessmask),
-      'sid' => dacl.trustee.sid,
-      'username' => dacl.trustee.name,
-    }
+    Trustee.from_dacl(dacl)
   end
 
   def owner=(owner_hash)
-    trustee = WIN32OLE.connect(OLEPrefix + CIMV2).get(TrusteeType).spawninstance_
-    trustee.name = owner_hash['username']
-    trustee.sid = owner_hash['sid']
-
-    sd = WIN32OLE.connect(OLEPrefix + CIMV2).get(SDType).spawninstance_
-    sd.controlflags = 4
-    sd.owner = trustee
-
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(SecuritySettingsType + name).setsecuritydescriptor(sd)
+    trustee = Trustee.new.merge(owner_hash)
+    wmi.get("Win32_LogicalShareSecuritySetting#{name_slug}").setsecuritydescriptor(trustee.to_sd)
   end
 
   def comment
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).description || :absent
+    wmi.get("Win32_Share#{name_slug}").description || :absent
   end
 
   def comment=(string)
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(@resource[:maxcon], string)
+    wmi.get("Win32_Share#{name_slug}").setshareinfo(@resource[:maxcon], string)
   end
 
   def maxcon
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).maximumallowed || :absent
+    wmi.get("Win32_Share#{name_slug}").maximumallowed || :absent
   end
 
   def maxcon=(int)
-    WIN32OLE.connect(OLEPrefix + CIMV2).get(ShareType + name).setshareinfo(int, @resource[:comment])
+    wmi.get("Win32_Share#{name_slug}").setshareinfo(int, @resource[:comment])
+  end
+
+  class Trustee < Hash
+    def self.from_dacl(dacl)
+      hash = new
+      hash['accessmask'] = String(dacl.accessmask)
+      hash['sid'] = dacl.trustee.sid
+      hash['username'] = dacl.trustee.name
+      hash
+    end
+
+    def to_wmi_object
+      trustee = WIN32OLE.connect('winmgmts://localhost/root/cimv2').get('Win32_Trustee').spawninstance_
+      trustee.name = self['username']
+      trustee.sid = self['sid']
+      trustee
+    end
+
+    def to_sd
+      sd = WIN32OLE.connect('winmgmts://localhost/root/cimv2').get('Win32_SecurityDescriptor').spawninstance_
+      sd.controlflags = 4
+      sd.owner = to_wmi_object
+      sd
+    end
   end
 
   private
 
-  def eval(action)
-    raise(Puppet::Error, ExitCodes[action]) unless action == 0
+  # Take a block, yield it, and raise an error with the applicable
+  # message given a yielded WMI call. This is intended to wrap WMI
+  # operations that don't return a value, but may fail by returning
+  # non-0.
+  def handle_wmi_error
+    code = yield
+    raise(Puppet::Error, ExitCodes[code]) unless code == 0
   end
 
-  def name
+  # WMI constructs a WIN32OLE object in a provided or default namespace
+  # and returns it.
+  def wmi(str=nil)
+    WIN32OLE.connect(str || 'winmgmts://localhost/root/cimv2')
+  end
+
+  def name_slug
     "='" + @resource[:name] + "'"
   end
 

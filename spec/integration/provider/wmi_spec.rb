@@ -33,9 +33,9 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
     WIN32OLE.expects(:connect).with('winmgmts:Win32_Share').returns(ole)
     ole.expects(:create).at_least_once.with(nil, 'windows_fileshare', 0, nil, nil).returns(0)
 
-    ole.expects(:get).with('Win32_SecurityDescriptor').returns(sd)
-    ole.expects(:get).with('Win32_Trustee').returns(trustee)
-    ole.expects(:get).with("Win32_LogicalShareSecuritySetting='windows_fileshare'").returns(sg)
+    ole.stubs(:get).with("Win32_LogicalShareSecuritySetting='windows_fileshare'").returns(sg)
+    ole.stubs(:get).with('Win32_Trustee').returns(trustee)
+    ole.stubs(:get).with('Win32_SecurityDescriptor').returns(sd)
     sd.expects(:spawninstance_).returns(sd)
     trustee.expects(:spawninstance_).returns(trustee)
     sd.expects(:controlflags=).with(4)
@@ -73,9 +73,9 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
   end
 
   it "can set the owner" do
-    ole.expects(:get).with('Win32_SecurityDescriptor').returns(sd)
-    ole.expects(:get).with('Win32_Trustee').returns(trustee)
-    ole.expects(:get).with("Win32_LogicalShareSecuritySetting='windows_fileshare'").returns(sg)
+    ole.stubs(:get).with("Win32_LogicalShareSecuritySetting='windows_fileshare'").returns(sg)
+    ole.stubs(:get).with('Win32_Trustee').returns(trustee)
+    ole.stubs(:get).with('Win32_SecurityDescriptor').returns(sd)
     sd.expects(:spawninstance_).returns(sd)
     trustee.expects(:spawninstance_).returns(trustee)
     sd.expects(:controlflags=).with(4)
@@ -83,7 +83,7 @@ describe Puppet::Type.type(:fileshare).provider(:wmi) do
     trustee.expects(:sid=).with(nil)
     sd.expects(:owner=).with(trustee)
     sg.expects(:setsecuritydescriptor).with(sd)
-    provider.owner = :owner
+    provider.owner = {:owner => :foo}
   end
 
   describe "checking the owner" do

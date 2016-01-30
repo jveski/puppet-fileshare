@@ -10,10 +10,6 @@ describe command(pp) do
   its(:exit_status) { should eq 0 }
 end
 
-describe command(pp) do
-  its(:exit_status) { should eq 0 }
-end
-
 describe file('\\\\localhost\test\test.txt') do
   it { should contain 'foo bar baz' }
 end
