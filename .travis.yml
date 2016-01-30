@@ -10,5 +10,3 @@ rvm:
   - 2.0.0
 script:
   - "rake spec"
-  - "rake validate"
-  - "rake lint"
